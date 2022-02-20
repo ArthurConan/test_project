@@ -1,0 +1,45 @@
+version: "3.5"
+
+services:
+  backend:
+    build:
+      context: ./
+      dockerfile: Dockerfile
+    command: bash -c "alembic upgrade head && python3 main.py"
+    volumes:
+      - ./settings.toml:/app/settings.toml
+      - ./test_project:/app/test_project/
+    ports:
+      - 8000:8000
+    depends_on:
+      - database
+
+  mailhog:
+    image: mailhog/mailhog:latest
+    restart: always
+    ports:
+      - 1025:1025
+      - 8025:8025
+
+  database:
+    image: postgres:13.3-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-password}
+      POSTGRES_DB: ${POSTGRES_DB:-db}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - 5432:5432
+
+  qa_database:
+    image: postgres:13.3-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-qa_user}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-qa_password}
+      POSTGRES_DB: ${POSTGRES_DB:-qa_db}
+    ports:
+      - 5431:5432
+
+volumes:
+    postgres_data: {}
