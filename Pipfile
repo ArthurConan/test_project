@@ -1,0 +1,35 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+alembic = "==1.7.1"
+fastapi = "==0.65.2"
+uvicorn = "==0.13.4"
+toml = "==0.10.2"
+passlib = "==1.7.4"
+python-jose = "==3.2.0"
+python-multipart = "==0.0.5"
+bcrypt = "==3.2.0"
+orjson = "==3.6.3"
+email-validator = "==1.1.2"
+Jinja2 = "==3.0.1"
+pyyaml = "==5.4.1"
+aiohttp = "==3.7.4.post0"
+requests = "==2.27.1"
+starlette-exporter = "==0.10.0"
+psycopg2-binary = "==2.9.1"
+SQLAlchemy = "==1.4.25"
+
+[dev-packages]
+flake8 = "==3.9.2"
+autopep8 = "==1.5.7"
+autoflake = "==1.4"
+black = "==20.8b1"
+isort = "==5.8.0"
+pytest = "==6.2.4"
+requests = "==2.25.1"
+
+[requires]
+python_version = "3.9"

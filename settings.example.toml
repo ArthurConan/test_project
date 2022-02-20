@@ -1,0 +1,20 @@
+[server]
+proto = "http"
+host = "0.0.0.0"
+port = 8000
+debug = false
+cors_origins = [ "*",]
+cors_methods = [ "*",]
+cors_headers = [ "*",]
+
+[auth]
+secret_key = "aa192f3d606e06aeec211898d3efdc913f80f5e40ed92f846d57ecb653f7810c"
+algorithm = "HS256"
+access_token_expire_minutes = 600
+
+[postgresql]
+host = "database"
+port = 5432
+user = "user"
+password = "password"
+db = "db"
