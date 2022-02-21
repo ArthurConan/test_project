@@ -4,13 +4,17 @@ from fastapi import APIRouter, Depends
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
 
+from test_project.api.auth import get_current_user
+from test_project.core.db import get_db
+from test_project.core.exceptions import (
+    ProjectNotFoundException,
+    PermissionException,
+    UserNotFoundException
+)
 from test_project.crud.project import project as crud_project
 from test_project.crud.user import user as crud_user
 from test_project.models.models import User as model_user
 from test_project.models.schemas import Project, ProjectCreate, ProjectUpdate
-from test_project.core.db import get_db
-from test_project.api.auth import get_current_user
-from test_project.core.exceptions import ProjectNotFoundException, PermissionException, UserNotFoundException
 
 router = APIRouter()
 

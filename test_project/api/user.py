@@ -2,12 +2,12 @@ from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from typing import Any, List
 
+from test_project.api.auth import get_current_user, get_current_superuser
+from test_project.core.db import get_db
+from test_project.core.exception_handler import UserExistsException
 from test_project.crud.user import user as crud_user
 from test_project.models.models import User as model_user
 from test_project.models.schemas import UserCreate, User
-from test_project.core.db import get_db
-from test_project.core.exception_handler import UserExistsException
-from test_project.api.auth import get_current_user, get_current_superuser
 
 
 router = APIRouter()
