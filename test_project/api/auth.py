@@ -10,7 +10,7 @@ from test_project.core.db import get_db
 from test_project.crud.user import user as crud_user
 from test_project.models.models import User as model_user
 from test_project.models.schemas import Token, TokenPayload, UserCreate, User
-from test_project.core.exception_handler import UserNotFoundException, UserNotAdminException
+from test_project.core.exceptions import UserNotFoundException, UserNotAdminException
 
 
 router = APIRouter()

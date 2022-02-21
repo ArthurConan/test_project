@@ -30,7 +30,7 @@ def custom_exception_handler(_: Request, exc: Exception) -> ORJSONResponse:
 
     if isinstance(exc, UserExistsException):
         return ORJSONResponse(
-            status_code=status.HTTP_409_CONFLICT, content={
+            status_code=status.HTTP_400_BAD_REQUEST, content={
                 "detail": "User already exist"}
         )
 

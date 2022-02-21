@@ -16,6 +16,22 @@ from test_project.crud.user import user as crud_user
 from test_project.core.db import SessionLocal
 
 
+#
+# SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
+# engine = create_engine(SQLALCHEMY_DATABASE_URL)
+# TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+
+
+# @pytest.fixture(scope="session")
+# def db():
+#     Base.metadata.drop_all(bind=engine)
+#     Base.metadata.create_all(bind=engine)
+#     db = TestingSessionLocal()
+#     try:
+#         yield db
+#     finally:
+#         db.close()
+
 @pytest.fixture(scope="session")
 def db() -> Generator:
     db = SessionLocal()
@@ -61,6 +77,31 @@ def user_token_headers(client: TestClient, random_user: model_user) -> Dict[str,
         json={
             'email': random_user.email,
             'password': random_user.password
+        }
+    )
+    response = r.json()
+    auth_token = response["access_token"]
+    headers = {"Authorization": f"Bearer {auth_token}"}
+    return headers
+
+
+@pytest.fixture(scope="module")
+def random_admin_user(db: Session):
+    email = random_email()
+    password = random_string()
+    name = random_string()
+    user_in = UserCreate(name=name, email=email, password=password, is_admin=True)
+    crud_user.create(db=db, obj=user_in)
+    return user_in
+
+
+@pytest.fixture(scope="module")
+def user_admin_token_headers(client: TestClient, random_admin_user: model_user) -> Dict[str, str]:
+    r = client.post(
+        "/api/auth/login/token",
+        json={
+            'email': random_admin_user.email,
+            'password': random_admin_user.password
         }
     )
     response = r.json()
