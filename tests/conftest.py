@@ -5,42 +5,34 @@ import random
 import string
 
 from fastapi.testclient import TestClient
-from sqlalchemy.orm import Session,sessionmaker
+from sqlalchemy.orm import Session, sessionmaker
 from sqlalchemy import create_engine
-from typing import Dict, Generator
+from typing import Dict
 
 from test_project import app
 from test_project.models.schemas import UserCreate, ProjectCreate, IssueCreate
-from test_project.models.models import User as model_user
+from test_project.models.models import User as model_user, Base
 from test_project.crud.user import user as crud_user
 from test_project.crud.project import project as crud_project
 from test_project.crud.issue import issue as crud_issue
-from test_project.core.db import SessionLocal
+from test_project.core.db import get_db
 
 
-#
-# SQLALCHEMY_DATABASE_URL = "sqlite:///./test.db"
-# engine = create_engine(SQLALCHEMY_DATABASE_URL)
-# TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+SQLALCHEMY_DATABASE_URL = f"postgresql+psycopg2://qa_user:qa_password@127.0.0.1:5431/qa_db"
+engine = create_engine(SQLALCHEMY_DATABASE_URL)
+TestingSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base.metadata.create_all(bind=engine)
 
 
-# @pytest.fixture(scope="session")
-# def db():
-#     Base.metadata.drop_all(bind=engine)
-#     Base.metadata.create_all(bind=engine)
-#     db = TestingSessionLocal()
-#     try:
-#         yield db
-#     finally:
-#         db.close()
-
-@pytest.fixture(scope="session")
-def db() -> Generator:
-    db = SessionLocal()
+def override_get_db():
     try:
+        db = TestingSessionLocal()
         yield db
     finally:
         db.close()
+
+
+app.dependency_overrides[get_db] = override_get_db
 
 
 @pytest.fixture
@@ -52,6 +44,15 @@ def loop():
 def client():
     with TestClient(app) as c:
         yield c
+
+
+@pytest.fixture(scope="session")
+def db():
+    try:
+        db = TestingSessionLocal()
+        yield db
+    finally:
+        db.close()
 
 
 def random_string() -> str:

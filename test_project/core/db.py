@@ -11,7 +11,7 @@ pg_password = get_settings().postgresql.password
 pg_db = get_settings().postgresql.db
 pg_db_url = f"postgresql+psycopg2://{pg_user}:{pg_password}@{pg_host}:{pg_port}/{pg_db}"
 
-engine = create_engine(pg_db_url)
+engine = create_engine(pg_db_url, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 
