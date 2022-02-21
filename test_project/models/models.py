@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, ForeignKey, Integer, String, Table
+from sqlalchemy import Boolean, Column, ForeignKey, Integer, String
 from sqlalchemy.orm import relationship
 from sqlalchemy.ext.declarative import as_declarative, declared_attr
 from typing import Any
@@ -28,10 +28,8 @@ class Project(Base):
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, index=True)
     owner_id = Column(Integer, ForeignKey("user.id"))
-    #owner = relationship("User", back_populates="projects", foreign_keys='User.projects')
     issues = relationship("Issue", back_populates="project")
     assigned_id = Column(Integer, ForeignKey("user.id"), nullable=True)
-    #assigned = relationship("User", back_populates="assigned_projects", foreign_keys='User.assigned_projects')
 
     is_deleted = Column(Boolean(), default=False)
 

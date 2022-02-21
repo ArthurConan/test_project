@@ -9,7 +9,7 @@ from test_project.core.settings import get_settings
 from test_project.core.db import get_db
 from test_project.crud.user import user as crud_user
 from test_project.models.models import User as model_user
-from test_project.models.schemas import Token, TokenPayload, UserCreate
+from test_project.models.schemas import Token, TokenPayload, UserCreate, User
 from test_project.core.exception_handler import UserNotFoundException, UserNotAdminException
 
 
@@ -49,4 +49,12 @@ def get_current_superuser(
     if not crud_user.is_admin(current_user):
         raise UserNotAdminException
 
+    return current_user
+
+
+@router.post("/login/test-token", response_model=User)
+def test_token(current_user: model_user = Depends(get_current_user)) -> Any:
+    """
+    Test access token
+    """
     return current_user
